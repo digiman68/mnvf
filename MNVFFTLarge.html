@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mare Nostrum — Fiche technique</title>
+  <style>
+    :root{
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --ink:#0f172a;
+      --muted:#475569;
+      --line:#e2e8f0;
+      --shadow: 0 10px 30px rgba(15, 23, 42, .08);
+      --radius:18px;
+      --radius2:14px;
+      --max: 1140px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--ink);
+      background: linear-gradient(180deg, #ffffff 0%, var(--bg) 55%, #ffffff 100%);
+    }
+    .wrap{max-width:var(--max); margin:0 auto; padding:24px 18px 60px;}
+    header{
+      display:flex; gap:16px; align-items:flex-start; justify-content:space-between;
+      padding:22px;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .title h1{margin:0; font-size:28px; letter-spacing:-0.02em}
+    .title p{margin:6px 0 0; color:var(--muted); line-height:1.35}
+    .meta{
+      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;
+      min-width:320px;
+    }
+    .pill{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:999px;
+      padding:10px 12px;
+      display:flex; gap:8px; align-items:center;
+      font-size:13px;
+      color:var(--muted);
+      white-space:nowrap;
+    }
+    .pill b{color:var(--ink); font-weight:750}
+    .actions{display:flex; gap:10px; justify-content:flex-end; margin-top:10px; flex-wrap:wrap}
+    .btn{
+      cursor:pointer;
+      border:1px solid var(--line);
+      background:#fff;
+      padding:10px 12px;
+      border-radius:12px;
+      font-weight:750;
+      font-size:13px;
+      display:inline-flex; gap:8px; align-items:center;
+    }
+    .btn:hover{box-shadow:0 10px 18px rgba(2,6,23,.08)}
+    .grid{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1.35fr .65fr;
+      gap:18px;
+    }
+    @media (max-width: 980px){
+      header{flex-direction:column; align-items:flex-start}
+      .meta{justify-content:flex-start; min-width:unset}
+      .grid{grid-template-columns:1fr}
+    }
+
+    section.card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+    section.card h2{
+      margin:0 0 10px;
+      font-size:18px;
+      letter-spacing:-0.01em;
+      display:flex; gap:10px; align-items:center;
+    }
+    .sub{margin:0 0 14px; color:var(--muted); line-height:1.4; font-size:14px}
+
+    /* Stage */
+    .stageWrap{
+      border:1px dashed #cbd5e1;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border-radius:var(--radius2);
+      padding:14px;
+      position:relative;
+    }
+    .stageTop{
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      margin-bottom:10px;
+      color:var(--muted);
+      font-size:13px;
+      flex-wrap:wrap;
+    }
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:999px;
+      padding:8px 10px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .stage{
+      width:100%;
+      aspect-ratio: 16 / 9;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(15,23,42,.03), transparent 40%),
+        radial-gradient(circle at 80% 30%, rgba(15,23,42,.03), transparent 45%),
+        linear-gradient(180deg, #ffffff, #f1f5f9);
+      position:relative;
+      overflow:hidden;
+      min-height:360px;
+    }
+    .stage::before{
+      content:"SCÈNE — VUE DU DESSUS";
+      position:absolute; top:12px; left:12px;
+      font-size:12px; color:rgba(15,23,42,.55);
+      letter-spacing:.06em;
+    }
+    .front{
+      position:absolute; left:0; right:0; bottom:0;
+      height:44px;
+      background: rgba(2,6,23,.06);
+      border-top:1px solid rgba(2,6,23,.08);
+      display:flex; align-items:center; justify-content:center;
+      font-size:12px; color:rgba(15,23,42,.65);
+      letter-spacing:.08em;
+    }
+    .ramp{
+      position:absolute; left:0; right:0; bottom:44px;
+      height:26px;
+      background: rgba(2,6,23,.035);
+      border-top:1px dashed rgba(2,6,23,.12);
+      display:flex; align-items:center; justify-content:center;
+      font-size:11px; color:rgba(15,23,42,.55);
+      letter-spacing:.10em;
+    }
+
+    .pos{
+      position:absolute;
+      transform: translate(-50%, -50%);
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:10px 10px;
+      width:180px;
+      box-shadow: 0 10px 24px rgba(2,6,23,.10);
+    }
+    .pos.wide{width:240px}
+    .pos.slim{width:160px}
+    .pos .top{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+      margin-bottom:6px;
+    }
+    .pos .label{
+      font-weight:800;
+      font-size:13px;
+      line-height:1.15;
+      letter-spacing:-0.01em;
+    }
+    .pos .meta2{
+      font-size:12px;
+      color:var(--muted);
+      display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+    }
+    .icon{
+      width:26px; height:26px; border-radius:10px;
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, #fff, #f8fafc);
+      display:grid; place-items:center;
+      flex:0 0 auto;
+      font-size:15px;
+    }
+    .tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;}
+    .tag{
+      font-size:11px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:6px 8px;
+      color:var(--muted);
+      background:#fff;
+      white-space:nowrap;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid var(--line);
+      background:#fff;
+      padding:8px 10px;
+      border-radius:999px;
+      font-size:12px;
+      color:var(--muted);
+      white-space:nowrap;
+    }
+
+    /* Musicians list */
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:12px;
+    }
+    @media (max-width: 520px){
+      .cards{grid-template-columns:1fr}
+      .pos{width:170px}
+      .pos.wide{width:220px}
+    }
+    .mini{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:16px;
+      padding:12px;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .mini .name{margin:0; font-weight:800; font-size:14px}
+    .mini .hint{margin:4px 0 0; color:var(--muted); font-size:12px; line-height:1.35}
+
+    /* Patch */
+    .tableWrap{
+      overflow:auto;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+    }
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      min-width:860px;
+    }
+    thead th{
+      text-align:left;
+      font-size:12px;
+      letter-spacing:.06em;
+      color:rgba(15,23,42,.7);
+      background:#f8fafc;
+      padding:12px 12px;
+      border-bottom:1px solid var(--line);
+      position:sticky; top:0;
+    }
+    tbody td{
+      padding:12px 12px;
+      border-bottom:1px solid var(--line);
+      vertical-align:top;
+      font-size:13px;
+    }
+    tbody tr:last-child td{border-bottom:0}
+    .mono{font-family:var(--mono)}
+
+    footer{
+      margin-top:18px;
+      color:var(--muted);
+      font-size:12px;
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+      padding:0 6px;
+    }
+
+    /* Print */
+    @media print{
+      body{background:#fff}
+      header, section.card{box-shadow:none}
+      .btn{display:none !important}
+      .wrap{padding:0}
+      header{border-radius:0; border:0; padding:0 0 10px}
+      section.card{border-radius:0; border:0; padding:0; margin-top:14px}
+      .stageWrap{border:0; padding:0}
+      .stage{box-shadow:none}
+      .tableWrap{border:1px solid #ddd}
+      footer{padding:0; margin-top:10px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <h1 id="showTitle">Mare Nostrum Voice Festival — Fiche technique</h1>
+        <p id="showSubtitle">Une odyssée musicale en Méditerranée — Plan de scène & patch</p>
+        <div class="actions">
+          <button class="btn" type="button" onclick="window.print()"><span aria-hidden="true">🖨️</span> Imprimer / PDF</button>
+          <button class="btn" type="button" onclick="toggleEdit()"><span aria-hidden="true">✏️</span> Mode édition</button>
+        </div>
+      </div>
+
+      <div class="meta" id="metaPills">
+        <div class="pill"><span aria-hidden="true">👤</span> Contact : <b contenteditable="false" data-edit="true">Skander Guetari</b></div>
+        <div class="pill"><span aria-hidden="true">📱</span> <b contenteditable="false" data-edit="true">+33 6 99 59 90 34</b></div>
+        <div class="pill"><span aria-hidden="true">📧</span> <b contenteditable="false" data-edit="true">kguetari@gmail.com</b></div>
+        <div class="pill"><span aria-hidden="true">🗓️</span> Mise à jour : <b id="updated" contenteditable="false" data-edit="true"></b></div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="card">
+        <h2><span aria-hidden="true">🧭</span> Plan de scène (inspiré de la configuration)</h2>
+        <p class="sub">Disposition indicative avec rampe (public) et postes principaux : percussions, batterie, basse, instruments mélodiques, chœurs/choristes.</p>
+
+        <div class="stageWrap">
+          <div class="stageTop">
+            <span class="badge"><span aria-hidden="true">⬇️</span> Avant-scène en bas</span>
+            <span class="badge"><span aria-hidden="true">🔎</span> Légende : 🎤 voix · 📥 DI · 🎚️ micro instrument · 🎛️ ampli AER</span>
+          </div>
+
+          <div class="stage" aria-label="Stage plot">
+            <!-- Backline -->
+            <div class="pos" style="left:50%; top:20%;">
+              <div class="top">
+                <div style="display:flex; gap:10px; align-items:center;">
+                  <div class="icon" aria-hidden="true">🥁</div>
+                  <div>
+                    <div class="label">Batterie</div>
+                    <div class="meta2">
+                      <span class="chip">🎚️ 2 Overhead</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tags">
+                <span class="tag">Centre arrière</span>
+                <span class="tag">Praticable batteur (si possible)</span>
+              </div>
+            </div>
+
+            <div class="pos slim" style="left:18%; top:28%;">
+              <div class="top">
+                <div style="display:flex; gap:10px; align-items:center;">
+                  <div class="icon" aria-hidden="true">🎸</div>
+                  <div>
+                    <div class="label">Basse</div>
+                    <div class="meta2"><span class="chip">📥 DI</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="tags"><span class="tag">Arrière gauche</span></div>
+            </div>
+
+            <div class="pos" style="left:82%; top:24%;">
+              <div class="top">
+                <div style="display:flex; gap:10px; align-items:center;">
+                  <div class="icon" aria-hidden="true">🪘</div>
+                  <div>
+                    <div class="label">Percussions #2</div>
+                    <div class="meta2"><span class="chip">🎚️ 2 Overhead</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="tags"><span class="tag">Arrière droite</span></div>
+            </div>
+
+            <!-- Midline -->
+            <div class="pos" style="left:15%; top:52%;">
+              <div class="top">
+                <div style="display:flex; gap:10px; align-items:center;">
+                  <div class="icon" aria-hidden="true">🪘</div>
+                  <div>
+                    <div class="label">Percussions #1</div>
+                    <div class="meta2"><span class="chip">Cajon · Tar · Darbouka · Bongos</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="tags"><span class="tag">Milieu gauche</span></div>
+            </div>
+
+            <div class="pos slim" style="left:33%; top:52%;">
+              <div class="top">
+                <div style="display:flex; gap:10px; align-items:center;">
+                  <div class="icon" aria-hidden="true">🎻</div>
+                  <div>
+                    <div class="label">Violon 1</div>
+                    <div class="meta2"><span class="chip">🎚️</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="tags"><span class="tag">Milieu</span></div>
+            </div>
+
+            <div class="pos slim" style="left:50%; top:52%;">
+              <div class="top">
+                <div style="display:flex; gap:10px; align-items:center;">
+                  <div class="icon" aria-hidden="true">🪕</div>
+                  <div>
+                    <div class="label">Qanun</div>
+                    <div class="meta2"><span class="chip">🎚️</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="tags"><span class="tag">Milieu</span></div>
+            </div>
+
+            <div class="pos slim" style="left:67%; top:52%;">
+              <div class="top">
+                <div style="display:flex; gap:10px; align-items:center;">
+                  <div class="icon" aria-hidden="true">🪕</div>
+                  <div>
+                    <div class="label">Oud</div>
+                    <div class="meta2"><span class="chip">📥 DI</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="tags"><span class="tag">Milieu</span></div>
+            </div>
+
+            <div class="pos slim" style="left:85%; top:52%;">
+              <div class="top">
+                <div style="display:flex; gap:10px; align-items:center;">
+                  <div class="icon" aria-hidden="true">🎻</div>
+                  <div>
+                    <div class="label">Violon 2</div>
+                    <div class="meta2"><span class="chip">🎚️</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="tags"><span class="tag">Milieu droite</span></div>
+            </div>
+
+            <div class="pos slim" style="left:50%; top:66%;">
+              <div class="top">
+                <div style="display:flex; gap:10px; align-items:center;">
+                  <div class="icon" aria-hidden="true">🎻</div>
+                  <div>
+                    <div class="label">Cello</div>
+                    <div class="meta2"><span class="chip">🎚️</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="tags"><span class="tag">Milieu / avant</span></div>
+            </div>
+
+            <!-- Frontline -->
+            <div class="pos" style="left:30%; top:80%;">
+              <div class="top">
+                <div style="display:flex; gap:10px; align-items:center;">
+                  <div class="icon" aria-hidden="true">🎸</div>
+                  <div>
+                    <div class="label">Guitare acoustique / flamenca</div>
+                    <div class="meta2"><span class="chip">📥 DI</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="tags"><span class="tag">Avant gauche</span></div>
+            </div>
+
+            <div class="pos" style="left:70%; top:80%;">
+              <div class="top">
+                <div style="display:flex; gap:10px; align-items:center;">
+                  <div class="icon" aria-hidden="true">🎤</div>
+                  <div>
+                    <div class="label">Guitare / Chant</div>
+                    <div class="meta2">
+                      <span class="chip">🎤 voix</span>
+                      <span class="chip">🎛️ AER</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tags"><span class="tag">Avant droite</span></div>
+            </div>
+
+            <div class="pos wide" style="left:50%; top:83%;">
+              <div class="top">
+                <div style="display:flex; gap:10px; align-items:center;">
+                  <div class="icon" aria-hidden="true">🎤</div>
+                  <div>
+                    <div class="label">Chant lead</div>
+                    <div class="meta2"><span class="chip">🎤 micro voix</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="tags"><span class="tag">Avant-centre</span></div>
+            </div>
+
+            <!-- Choir -->
+            <div class="pos wide" style="left:50%; top:36%;">
+              <div class="top">
+                <div style="display:flex; gap:10px; align-items:center;">
+                  <div class="icon" aria-hidden="true">👥</div>
+                  <div>
+                    <div class="label">Choristes (x8)</div>
+                    <div class="meta2">
+                      <span class="chip">4 hommes · 4 femmes</span>
+                      <span class="chip">2 par micro</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tags">
+                <span class="tag">Praticables chœurs (si possible)</span>
+                <span class="tag">Arrière / milieu</span>
+              </div>
+            </div>
+
+            <div class="ramp" aria-hidden="true">RAMPE — PUBLIC</div>
+            <div class="front" aria-hidden="true">FRONT / PUBLIC</div>
+          </div>
+
+          <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+            <span class="chip">🎤 Voix : Lead + chœurs/choristes (2 par micro)</span>
+            <span class="chip">📥 DI : Basse · Guitare(s) · Oud</span>
+            <span class="chip">🎚️ Instruments : Cordes / Qanun / percussions (selon set)</span>
+            <span class="chip">🎛️ Ampli : AER (guitare/chant) + AER acoustique</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2><span aria-hidden="true">🎛️</span> Effectif (inspiré de la fiche)</h2>
+        <p class="sub">Cartes synthétiques + pictogrammes.</p>
+        <div class="cards" id="musiciansCards"></div>
+
+        <div style="margin-top:14px; border-top:1px solid var(--line); padding-top:14px;">
+          <h2 style="margin:0 0 8px; font-size:16px;"><span aria-hidden="true">🧩</span> Backline (à adapter)</h2>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <span class="chip">15 pupitres</span>
+            <span class="chip">Ampli basse</span>
+            <span class="chip">Ampli guitare type Fender</span>
+            <span class="chip">Ampli guitare acoustique type AER</span>
+            <span class="chip">Batterie</span>
+            <span class="chip">2 retours chanteurs</span>
+            <span class="chip">1 retour / musicien</span>
+            <span class="chip">Praticables chœurs</span>
+            <span class="chip">Praticable batteur</span>
+            <span class="chip">2 tabourets bar</span>
+            <span class="chip">Danse : planche + micro (si danseur.se)</span>
+          </div>
+          <p class="sub" style="margin:12px 0 0;">
+            <span contenteditable="false" data-edit="true">[Ajouter ici toute précision (nombre de retours exact, dimensions plateau, contraintes, etc.)]</span>
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <section class="card" style="margin-top:18px;">
+      <h2><span aria-hidden="true">🔌</span> Patch (suggestion inspirée)</h2>
+      <p class="sub">Version “propre” et générique (sans marques), modifiable en mode édition.</p>
+
+      <div class="tableWrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:28%;">Poste</th>
+              <th style="width:22%;">Micro / DI</th>
+              <th style="width:18%;">Qté</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody id="patchBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer>
+      <div>Fiche technique — <b>Mare Nostrum Voice Festival</b></div>
+      <div>Dernière mise à jour : <span id="footerDate"></span></div>
+    </footer>
+  </div>
+
+  <script>
+    const CONFIG = {
+      showTitle: "Mare Nostrum Voice Festival — Fiche technique",
+      showSubtitle: "Une odyssée musicale en Méditerranée — Plan de scène & patch",
+      updated: new Date().toLocaleDateString("fr-FR"),
+      musicians: [
+        { name: "Chant lead", icon: "🎤", note: "Micro voix" },
+        { name: "Chœurs / Choristes (x8)", icon: "👥", note: "4 hommes · 4 femmes — 2 par micro" },
+        { name: "Basse", icon: "🎸", note: "DI" },
+        { name: "Batterie", icon: "🥁", note: "2 micros Overhead (selon configuration)" },
+        { name: "Percussions #1", icon: "🪘", note: "Cajon · Tar · Darbouka · Bongos (selon set)" },
+        { name: "Percussions #2", icon: "🪘", note: "Daff · Bendir · divers — 2 Overhead (selon set)" },
+        { name: "Violon 1", icon: "🎻", note: "Micro instrument" },
+        { name: "Violon 2", icon: "🎻", note: "Micro instrument" },
+        { name: "Cello", icon: "🎻", note: "Micro instrument" },
+        { name: "Qanun", icon: "🪕", note: "Micro instrument" },
+        { name: "Oud", icon: "🪕", note: "DI" },
+        { name: "Guitare acoustique / flamenca", icon: "🎸", note: "DI" },
+        { name: "Guitare / Chant", icon: "🎤", note: "Voix + ampli acoustique type AER" }
+      ],
+      patch: [
+        { poste:"Chant lead", io:"🎤 Micro voix", qty:"1", notes:"" },
+        { poste:"Chœurs / Choristes", io:"🎤 Micro voix", qty:"4", notes:"8 choristes — 2 par micro" },
+        { poste:"Basse", io:"📥 DI", qty:"1", notes:"" },
+        { poste:"Guitare acoustique / flamenca", io:"📥 DI", qty:"1", notes:"" },
+        { poste:"Guitare / Chant", io:"🎤 Micro voix + 📥 DI", qty:"1 + 1", notes:"Ampli acoustique type AER (si besoin)" },
+        { poste:"Oud", io:"📥 DI", qty:"1", notes:"" },
+        { poste:"Qanun", io:"🎚️ Micro instrument", qty:"1", notes:"" },
+        { poste:"Violon 1", io:"🎚️ Micro instrument", qty:"1", notes:"" },
+        { poste:"Violon 2", io:"🎚️ Micro instrument", qty:"1", notes:"" },
+        { poste:"Cello", io:"🎚️ Micro instrument", qty:"1", notes:"" },
+        { poste:"Batterie", io:"🎚️ Overhead", qty:"2", notes:"(config batterie à préciser)" },
+        { poste:"Percussions #2", io:"🎚️ Overhead", qty:"2", notes:"(selon set)" },
+        { poste:"Percussions #1", io:"🎚️ Micros percussions", qty:"2", notes:"(selon set)" }
+      ]
+    };
+
+    const $ = (sel) => document.querySelector(sel);
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('\"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function render(){
+      $("#showTitle").textContent = CONFIG.showTitle;
+      $("#showSubtitle").textContent = CONFIG.showSubtitle;
+      $("#updated").textContent = CONFIG.updated;
+      $("#footerDate").textContent = CONFIG.updated;
+
+      const cards = $("#musiciansCards");
+      cards.innerHTML = "";
+      CONFIG.musicians.forEach(m => {
+        const div = document.createElement("div");
+        div.className = "mini";
+        div.innerHTML = `
+          <div class="icon" aria-hidden="true">${m.icon}</div>
+          <div>
+            <p class="name">${escapeHtml(m.name)}</p>
+            <p class="hint">${escapeHtml(m.note || "")}</p>
+          </div>
+        `;
+        cards.appendChild(div);
+      });
+
+      const tbody = $("#patchBody");
+      tbody.innerHTML = "";
+      CONFIG.patch.forEach(row => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><b>${escapeHtml(row.poste)}</b></td>
+          <td class="mono">${escapeHtml(row.io)}</td>
+          <td class="mono">${escapeHtml(row.qty)}</td>
+          <td contenteditable="false" data-edit="true">${escapeHtml(row.notes || "")}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    let editMode = false;
+    function toggleEdit(){
+      editMode = !editMode;
+      document.querySelectorAll("[data-edit='true']").forEach(el => {
+        el.setAttribute("contenteditable", editMode ? "true" : "false");
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>
